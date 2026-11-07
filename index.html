@@ -136,7 +136,7 @@
     <div class="secao">
       <label class="campo" for="textoBruto">1. Cole o texto do sistema</label>
       <textarea id="textoBruto" placeholder="Ex.:&#10;Data: 05/11/2026&#10;Cliente: Maria da Silva&#10;Valor da parcela: 385,50&#10;Valor do troco: 1.200,00"></textarea>
-      <p class="hint">Aceita o texto completo do sistema (nome do cliente na 1ª linha, parcela unificada e troco aproximado) — ou os rótulos tradicionais (Cliente:, Valor da parcela:, Troco:).</p>
+      <p class="hint">Aceita o texto completo do sistema (nome do cliente na 1ª linha, parcela atual, parcela unificada e troco aproximado) — ou os rótulos tradicionais (Cliente:, Valor da parcela:, Troco:).</p>
       <div class="linha-botoes">
         <button type="button" class="btn-processar" id="btnProcessar">Processar Dados</button>
         <button type="button" class="btn-limpar" id="btnLimpar" title="Limpar tudo para o próximo cliente">Limpar</button>
@@ -151,8 +151,11 @@
 
       <label class="campo" for="campoNome">Nome do cliente</label>
       <input type="text" id="campoNome" placeholder="Ex.: Maria da Silva" autocomplete="off">
+      
+      <label class="campo" for="campoParcela">Valor atual da parcela <span class="hint">(R$)</span></label>
+      <input type="text" id="campoParcela" placeholder="Ex.: 385,50" inputmode="decimal" autocomplete="off">
 
-      <label class="campo" for="campoParcela">Valor da parcela <span class="hint">(R$)</span></label>
+      <label class="campo" for="campoParcela">Valor total <span class="hint">(R$)</span></label>
       <input type="text" id="campoParcela" placeholder="Ex.: 385,50" inputmode="decimal" autocomplete="off">
 
       <label class="campo" for="campoTroco">Valor do troco <span class="hint">(R$ — deixe em branco se não houver)</span></label>
