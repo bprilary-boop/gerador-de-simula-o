@@ -183,7 +183,6 @@ function mostrarErro(texto, campoId) {
     if (campoId) document.getElementById(campoId).classList.add('erro');
 }
 
-
 <script>
 // =====================================================================
 // GERADOR DE SIMULAÇÕES BP — versão web, arquivo único.
@@ -408,34 +407,7 @@ const MEMORIA_OK = (() => {
     }
 })();
   
-  // ---------- ações ----------
-function gerarSimulacao() {
-    limparErrosVisuais();
-    const msgDiv = document.getElementById('mensagem');
-    msgDiv.innerText = '';
-    // Atalho amigável: se os campos estiverem vazios, mas existir texto
-    // colado, processa o texto automaticamente antes de gerar.
-    if (!document.getElementById('campoNome').value.trim() && !document.getElementById('campoParcela').value.trim()) {
-        const bruto = document.getElementById('textoBruto').value.trim();
-        if (bruto) {
-            const r = interpretarTexto(bruto);
-            document.getElementById('campoData').value = r.data || hojeFormatado();
-            if (r.nome) document.getElementById('campoNome').value = r.nome;
-            if (r.parcela !== null) document.getElementById('campoParcela').value = fmtMoeda(r.parcela);
-            if (r.troco !== null && r.troco > 0) document.getElementById('campoTroco').value = fmtMoeda(r.troco);
-        }
-    }
-    const dados = coletarDados();
-    if (!dados.valido) {
-        mostrarErro(dados.erro, dados.campo);
-        return;
-    }
-    salvarNaMemoria(dados);
-    renderizarResultado(dados);
-    renderizarBotoes(dados);
-}
-
-
+  
 function salvarNaMemoria(dados) {
     if (!MEMORIA_OK) return;
     try {
@@ -716,8 +688,35 @@ document.getElementById('btnLimpar').addEventListener('click', () => {
     const campoData = document.getElementById('campoData');
     if (!campoData.value) campoData.value = hojeFormatado();
 })();
-  document.getElementById('btnGerar').addEventListener('click', gerarSimulacao);
+  // ---------- ações ----------
+function gerarSimulacao() {
+    limparErrosVisuais();
+    const msgDiv = document.getElementById('mensagem');
+    msgDiv.innerText = '';
+    // Atalho amigável: se os campos estiverem vazios, mas existir texto
+    // colado, processa o texto automaticamente antes de gerar.
+    if (!document.getElementById('campoNome').value.trim() && !document.getElementById('campoParcela').value.trim()) {
+        const bruto = document.getElementById('textoBruto').value.trim();
+        if (bruto) {
+            const r = interpretarTexto(bruto);
+            document.getElementById('campoData').value = r.data || hojeFormatado();
+            if (r.nome) document.getElementById('campoNome').value = r.nome;
+            if (r.parcela !== null) document.getElementById('campoParcela').value = fmtMoeda(r.parcela);
+            if (r.troco !== null && r.troco > 0) document.getElementById('campoTroco').value = fmtMoeda(r.troco);
+        }
+    }
+    const dados = coletarDados();
+    if (!dados.valido) {
+        mostrarErro(dados.erro, dados.campo);
+        return;
+    }
+    salvarNaMemoria(dados);
+    renderizarResultado(dados);
+    renderizarBotoes(dados);
+}
+document.getElementById('btnGerar').addEventListener('click', gerarSimulacao);
 document.getElementById('btnProcessar').addEventListener('click', processarTexto);
+  
 </script>
 </body>
 </html>
