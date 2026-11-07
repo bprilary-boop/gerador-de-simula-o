@@ -170,18 +170,6 @@
     <div id="mensagem"></div>
   </div>
 
-  function limparErrosVisuais() {
-    ['campoData', 'campoNome', 'campoParcela', 'campoTroco', 'textoBruto'].forEach((id) => {
-        document.getElementById(id).classList.remove('erro');
-    });
-}
-
-function mostrarErro(texto, campoId) {
-    const msgDiv = document.getElementById('mensagem');
-    msgDiv.style.color = '#EA4335';
-    msgDiv.innerText = texto;
-    if (campoId) document.getElementById(campoId).classList.add('erro');
-}
 
 <script>
 // =====================================================================
@@ -284,6 +272,18 @@ function preencherTemplate(texto, valores) {
 function primeiroNome(nomeCompleto) {
     const partes = nomeCompleto.trim().split(/\s+/);
     return (partes.length > 0 && partes[0]) ? partes[0] : 'cliente';
+}
+    function limparErrosVisuais() {
+    ['campoData', 'campoNome', 'campoParcela', 'campoTroco', 'textoBruto'].forEach((id) => {
+        document.getElementById(id).classList.remove('erro');
+    });
+}
+
+function mostrarErro(texto, campoId) {
+    const msgDiv = document.getElementById('mensagem');
+    msgDiv.style.color = '#EA4335';
+    msgDiv.innerText = texto;
+    if (campoId) document.getElementById(campoId).classList.add('erro');
 }
 
 // ---------- interpretação do texto colado ----------
