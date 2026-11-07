@@ -152,12 +152,16 @@
       <label class="campo" for="campoNome">Nome do cliente</label>
       <input type="text" id="campoNome" placeholder="Ex.: Maria da Silva" autocomplete="off">
       
+       <label class="campo" for="campoparcelaatual">Valor Atual <span class="hint">(R$)</span></label>
+      <input type="text" id="campoparcelaatual" placeholder="Ex.: 385,50" inputmode="decimal" autocomplete="off">
+      
       <label class="campo" for="campoParcela">Valor total <span class="hint">(R$)</span></label>
       <input type="text" id="campoParcela" placeholder="Ex.: 385,50" inputmode="decimal" autocomplete="off">
 
       <label class="campo" for="campoTroco">Valor do troco<span class="hint">(R$ — deixe em branco se não houver)</span></label>
       <input type="text" id="campoTroco" placeholder="Ex.: 1.200,00" inputmode="decimal" autocomplete="off">
-
+      
+      <button type="button" class="btn-gerar" id="btnGerar">📊 Gerar Simulação</button>
       
     </div>
 
@@ -165,6 +169,20 @@
     <div id="botoes-copia"></div>
     <div id="mensagem"></div>
   </div>
+
+  function limparErrosVisuais() {
+    ['campoData', 'campoNome', 'campoParcela', 'campoTroco', 'textoBruto'].forEach((id) => {
+        document.getElementById(id).classList.remove('erro');
+    });
+}
+
+function mostrarErro(texto, campoId) {
+    const msgDiv = document.getElementById('mensagem');
+    msgDiv.style.color = '#EA4335';
+    msgDiv.innerText = texto;
+    if (campoId) document.getElementById(campoId).classList.add('erro');
+}
+
 
 <script>
 // =====================================================================
@@ -389,6 +407,34 @@ const MEMORIA_OK = (() => {
         return false;
     }
 })();
+  
+  // ---------- ações ----------
+function gerarSimulacao() {
+    limparErrosVisuais();
+    const msgDiv = document.getElementById('mensagem');
+    msgDiv.innerText = '';
+    // Atalho amigável: se os campos estiverem vazios, mas existir texto
+    // colado, processa o texto automaticamente antes de gerar.
+    if (!document.getElementById('campoNome').value.trim() && !document.getElementById('campoParcela').value.trim()) {
+        const bruto = document.getElementById('textoBruto').value.trim();
+        if (bruto) {
+            const r = interpretarTexto(bruto);
+            document.getElementById('campoData').value = r.data || hojeFormatado();
+            if (r.nome) document.getElementById('campoNome').value = r.nome;
+            if (r.parcela !== null) document.getElementById('campoParcela').value = fmtMoeda(r.parcela);
+            if (r.troco !== null && r.troco > 0) document.getElementById('campoTroco').value = fmtMoeda(r.troco);
+        }
+    }
+    const dados = coletarDados();
+    if (!dados.valido) {
+        mostrarErro(dados.erro, dados.campo);
+        return;
+    }
+    salvarNaMemoria(dados);
+    renderizarResultado(dados);
+    renderizarBotoes(dados);
+}
+
 
 function salvarNaMemoria(dados) {
     if (!MEMORIA_OK) return;
@@ -670,6 +716,8 @@ document.getElementById('btnLimpar').addEventListener('click', () => {
     const campoData = document.getElementById('campoData');
     if (!campoData.value) campoData.value = hojeFormatado();
 })();
+  document.getElementById('btnGerar').addEventListener('click', gerarSimulacao);
+document.getElementById('btnProcessar').addEventListener('click', processarTexto);
 </script>
 </body>
 </html>
